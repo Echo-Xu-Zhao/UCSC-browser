@@ -1,0 +1,22 @@
+loading broadPeak and narrowPeak datasets onto the UCSC Genome Browser. 
+The problem that you are having is that the UCSC Genome Browser is not sure how to read the files that you are providing. 
+Based on the initial structure, it assumes that they are BED files (http://genome.ucsc.edu/FAQ/FAQformat.html#format1). 
+The later fields of a standard BED file, however, do not match the data in your files. 
+Specifically, the first line is
+
+chr6	47650976	47651432	.	1000	.	190.60379	-1.00000	2.19590	228
+
+and the value in the seventh column. The browser attempts to interpret that number as the thickStart coordinate and can't figure it out.
+The way to get around this issue is to explicitly tell the browser what type of data is stored in each of these files. 
+You can do this by unzipping the file and using a text editor to add a "track line" to the top of the file. 
+For example, you could add a line so that the first two lines read:
+
+track type=narrowPeak name="Day1_narrowPeak" 
+chr6	47650976	47651432	.	1000	.	190.60379	-1.00000	2.19590	228
+
+You should then be able to submit your files as custom tracks.
+
+
+Ref from https://groups.google.com/a/soe.ucsc.edu/forum/#!topic/genome/JzQtbjGbTnc
+http://genome.ucsc.edu/FAQ/FAQformat.html#format12 
+Track lines are discussed in more detail at http://genome.ucsc.edu/goldenPath/help/hgTracksHelp.html#TRACK.
